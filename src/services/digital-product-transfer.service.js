@@ -54,7 +54,7 @@ class DigitalProductTransferService {
   }
 
   static async detail(id) {
-    if (typeof (id) == 'string') {
+    if (typeof (id) === 'string') {
       id = id.replace("FT", "");
     }
     return await this._http.get(`v2/digital-product-transfers/${id}`);
@@ -65,14 +65,14 @@ class DigitalProductTransferService {
   }
 
   static async confirm(id) {
-    if (typeof (id) == 'string') {
+    if (typeof (id) === 'string') {
       id = id.replace("FT", "");
     }
     return this._http.put(`v2/digital-product-transfers/${id}/confirm`)
   }
 
   static async cancel(id) {
-    if (typeof (id) == 'string') {
+    if (typeof (id) === 'string') {
       id = id.replace("FT", "");
     }
     return this._http.put(`v2/digital-product-transfers/${id}/cancel`)

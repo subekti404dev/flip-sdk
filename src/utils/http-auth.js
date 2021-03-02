@@ -19,7 +19,7 @@ class HttpAuth extends Http {
     this._axios.interceptors.response.use(
       (response) => response,
       async (error) => {
-        if (_.get(error, "response.status") == 401 || !credential.accessToken) {
+        if (_.get(error, "response.status") === 401 || !credential.accessToken) {
           try {
             const { token } = await LoginService.refreshToken();
             credential.token = { accessToken: token }

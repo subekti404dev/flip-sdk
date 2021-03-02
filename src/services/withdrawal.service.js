@@ -28,7 +28,7 @@ class WithdrawalService {
     return data;
   }
   static async detail(id) {
-    if (typeof(id) == 'string') {
+    if (typeof(id) === 'string') {
       id = id.replace("W", "");
     }
     return await this._http.get(`v2/withdrawal-transfers/${id}`);

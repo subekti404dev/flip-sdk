@@ -39,7 +39,7 @@ async function main() {
   // );
   // return data;
   // const { inquiryData, validateData } = data;
-  // if (inquiryData.status == 'SUCCESS' && validateData.validation_result) {
+  // if (inquiryData.status === 'SUCCESS' && validateData.validation_result) {
   //   // console.log('OK')
   //   const { name } = inquiryData;
   //   const transferData = await ForwardTransferService.transfer(
