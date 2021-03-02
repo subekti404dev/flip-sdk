@@ -1,0 +1,21 @@
+{
+  "name": "jenius-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "login": "npx node setup.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "dotenv": "^8.2.0",
+    "js-base64": "^3.6.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "querystring": "^0.2.1"
+  }
+}
