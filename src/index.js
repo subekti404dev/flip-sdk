@@ -6,7 +6,7 @@ const { UserService } = require('./services/user.service')
 const { TransactionService } = require('./services/transaction.service')
 const { InquiryService } = require('./services/inquiry.service')
 const { ForwardTransferService } = require('./services/forward-transfer.service')
-
+const { BreakService } = require('./services/break.service')
 
 // LoginService.login(process.env.EMAIL, process.env.PASSWORD).then(console.log).catch(console.log)
 // LoginService.refreshToken().then(console.log).catch(console.log)
@@ -15,9 +15,12 @@ const { ForwardTransferService } = require('./services/forward-transfer.service'
 // TransactionService.getTransactions(1, 3).then((data) => {console.log(data)}).catch(console.log)
 
 async function main() {
+  const isBreak = await BreakService.isBreak();
+  console.log({isBreak});
+  return isBreak
   const recipient = {
-    bank: 'cimb',
-    accountNumber: '8099087722171686'
+    bank: 'ovo',
+    accountNumber: '087722171686'
   };
   const amount = 10000;
   const remark = 'tes isi ovo lewat flip';
@@ -27,10 +30,11 @@ async function main() {
     amount,
     remark
   );
+  return data;
   const { inquiryData, validateData } = data;
   if (inquiryData.status == 'SUCCESS' && validateData.validation_result) {
     // console.log('OK')
-    const {name} = inquiryData;
+    const { name } = inquiryData;
     const transferData = await ForwardTransferService.transfer(
       recipient.accountNumber,
       name,
