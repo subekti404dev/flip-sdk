@@ -1,14 +1,17 @@
 const { HttpAuth } = require('../utils/http-auth');
 
 class InquiryService {
-  static _http = new HttpAuth();
+  _http;
+  constructor(accessToken) {
+    this._http = new HttpAuth({accessToken});
+  }
 
-  static inquiryAccount(bank, accountNumber) {
+  async inquiryAccount(bank, accountNumber) {
     const url = `v2/accounts/inquiry-account-number?bank=${bank}&account_number=${accountNumber}`;
     return this._http.get(url);
   }
 
-  static validate(bank, accountNumber, accountName, amount, remark) {
+  async validate(bank, accountNumber, accountName, amount, remark) {
     const payload = {
       account_number: accountNumber,
       beneficiary_name: accountName,
@@ -21,7 +24,7 @@ class InquiryService {
     return this._http.post('v2/transactions/validate', payload)
   }
 
-  static async inquiryAndValidate(bank, accountNumber, amount, remark) {
+  async inquiryAndValidate(bank, accountNumber, amount, remark) {
     const inquiryData = await this.inquiryAccount(bank, accountNumber);
     if (inquiryData) {
       const { id, bank, bank_code, account_number, name, account_holder, status } = inquiryData;

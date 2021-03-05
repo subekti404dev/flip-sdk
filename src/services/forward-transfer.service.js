@@ -1,9 +1,12 @@
 const { HttpAuth } = require('../utils/http-auth');
 
 class ForwardTransferService {
-  static _http = new HttpAuth();
+  _http;
+  constructor(accessToken) {
+    this._http = new HttpAuth({accessToken});
+  }
 
-  static async transfer(
+  async transfer(
     recepientAccountNumber,
     recepientAccountName,
     recepientBank,
@@ -30,25 +33,25 @@ class ForwardTransferService {
     return FTData;
   }
 
-  static async detail(id) {
+  async detail(id) {
     if (typeof(id) === 'string') {
       id = id.replace("FT", "");
     }
     return await this._http.get(`v2/forward-transfers/${id}`);
   }
 
-  static async flipBank(id) {
+  async flipBank(id) {
     return this._http.get(`v1/bank-code/${id}`);
   }
 
-  static async confirm(id) {
+  async confirm(id) {
     if (typeof(id) === 'string') {
       id = id.replace("FT", "");
     }
     return this._http.put(`v2/forward-transfers/${id}/confirm`)
   }
 
-  static async cancel(id) {
+  async cancel(id) {
     if (typeof(id) === 'string') {
       id = id.replace("FT", "");
     }

@@ -1,14 +1,17 @@
 const { HttpAuth } = require('../utils/http-auth');
 
 class AccountService {
-  static _http = new HttpAuth();
+  _http;
+  constructor(accessToken) {
+    this._http = new HttpAuth({accessToken});
+  }
 
-  static async getContacts() {
+  async getContacts() {
     const data = await this._http.get('v2/beneficiary-accounts');
     return data;
   }
 
-  static async deleteContacts(id) {
+  async deleteContacts(id) {
     let ids = [];
     if (typeof (id) === 'string') ids.push(id);
     if (typeof (id) === 'object' && id.length > 0) ids = id;
@@ -18,8 +21,6 @@ class AccountService {
     });
     return data;
   }
-
-
 }
 
 module.exports = { AccountService }
