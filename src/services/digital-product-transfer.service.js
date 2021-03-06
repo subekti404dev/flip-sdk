@@ -8,7 +8,8 @@ class DigitalProductTransferService {
   }
 
   async getWalletProducts() {
-    return this._http.get('v2/digital-products?product_type=5')
+    const result = await this._http.get('v2/digital-products?product_type=5');
+    return result.products;
   }
 
   async getMinimumPrice(flip_product_id) {
@@ -20,7 +21,7 @@ class DigitalProductTransferService {
         price: '0'
       }
       const FTData = await this._http.post('v2/digital-product-transfers', payload);
-
+      return FTData;
     } catch (error) {
       const message = _.get(error, 'errors[0].message');
       if (!message) {
