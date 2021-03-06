@@ -56,10 +56,6 @@ class DigitalProductTransferService {
         pin
       }
       const FTData = await this._http.post('v2/digital-product-transfers', payload);
-      if (FTData && FTData.flip_receiver_bank_code) {
-        const flip_receiver_bank = await this.flipBank(FTData.flip_receiver_bank_code);
-        FTData.flip_receiver_bank = flip_receiver_bank;
-      }
       return FTData;
     } catch (error) {
       const errorMessage = _.get(error, 'errors[0].message');
