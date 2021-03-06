@@ -27,17 +27,25 @@ class FlipSDK {
   }
 
   async login(email, password) {
-    const loginService = new LoginService();
-    const data = await loginService.login(email, password);
-    this.updateAccessToken(data.token);
-    return data;
+    try {
+      const loginService = new LoginService();
+      const data = await loginService.login(email, password);
+      this.updateAccessToken(data.token);
+      return data;
+    } catch (error) {
+      throw new Error(error.message)
+    }
   }
 
   async refreshToken() {
-    const loginService = new LoginService();
-    const data = await loginService.refreshToken(this._accessToken);
-    this.updateAccessToken(data.token);
-    return data;
+    try {
+      const loginService = new LoginService();
+      const data = await loginService.refreshToken(this._accessToken);
+      this.updateAccessToken(data.token);
+      return data;
+    } catch (error) {
+      throw new Error(error.message)
+    }
   }
 
   get accountService() {
