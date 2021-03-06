@@ -4,12 +4,17 @@ const _ = require("lodash");
 class DigitalProductTransferService {
   _http;
   constructor(accessToken) {
-    this._http = new HttpAuth({accessToken});
+    this._http = new HttpAuth({ accessToken });
   }
 
   async getWalletProducts() {
-    const result = await this._http.get('v2/digital-products?product_type=5');
-    return result.products;
+    try {
+      const result = await this._http.get('v2/digital-products?product_type=5');
+      return result.products;
+    } catch (error) {
+      const errorMessage = _.get(error, 'errors[0].message');
+      throw new Error(`Error Flip: ${errorMessage}`);
+    }
   }
 
   async getMinimumPrice(flip_product_id) {
@@ -34,52 +39,106 @@ class DigitalProductTransferService {
     }
   }
 
+  async buy(
+    flip_product_id,
+    account_number,
+    pin,
+    price = null,
+  ) {
+    try {
+      if (!price) {
+        price = await this.getMinimumPrice(flip_product_id);
+      }
+      const payload = {
+        flip_product_id,
+        account_number,
+        price,
+        pin
+      }
+      const FTData = await this._http.post('v2/digital-product-transfers', payload);
+      if (FTData && FTData.flip_receiver_bank_code) {
+        const flip_receiver_bank = await this.flipBank(FTData.flip_receiver_bank_code);
+        FTData.flip_receiver_bank = flip_receiver_bank;
+      }
+      return FTData;
+    } catch (error) {
+      const errorMessage = _.get(error, 'errors[0].message');
+      throw new Error(`Error Flip: ${errorMessage}`);
+    }
+  }
+
   async transfer(
     sender_bank,
     flip_product_id,
     account_number,
     price = null
   ) {
-    if (!price) {
-      price = await this.getMinimumPrice(flip_product_id);
+    try {
+      if (!price) {
+        price = await this.getMinimumPrice(flip_product_id);
+      }
+      const payload = {
+        sender_bank,
+        flip_product_id,
+        account_number,
+        price
+      }
+      const FTData = await this._http.post('v2/digital-product-transfers', payload);
+      if (FTData && FTData.flip_receiver_bank_code) {
+        const flip_receiver_bank = await this.flipBank(FTData.flip_receiver_bank_code);
+        FTData.flip_receiver_bank = flip_receiver_bank;
+      }
+      return FTData;
+    } catch (error) {
+      const errorMessage = _.get(error, 'errors[0].message');
+      throw new Error(`Error Flip: ${errorMessage}`);
     }
-    const payload = {
-      sender_bank,
-      flip_product_id,
-      account_number,
-      price
-    }
-    const FTData = await this._http.post('v2/digital-product-transfers', payload);
-    if (FTData && FTData.flip_receiver_bank_code) {
-      const flip_receiver_bank = await this.flipBank(FTData.flip_receiver_bank_code);
-      FTData.flip_receiver_bank = flip_receiver_bank;
-    }
-    return FTData;
+
   }
 
   async detail(id) {
-    if (typeof (id) === 'string') {
-      id = id.replace("FT", "");
+    try {
+      if (typeof (id) === 'string') {
+        id = id.replace("FT", "");
+      }
+      return await this._http.get(`v2/digital-product-transfers/${id}`);
+    } catch (error) {
+      const errorMessage = _.get(error, 'errors[0].message');
+      throw new Error(`Error Flip: ${errorMessage}`);
     }
-    return await this._http.get(`v2/digital-product-transfers/${id}`);
   }
 
   async flipBank(id) {
-    return this._http.get(`v1/bank-code/${id}`);
+    try {
+      return this._http.get(`v1/bank-code/${id}`);
+    } catch (error) {
+      const errorMessage = _.get(error, 'errors[0].message');
+      throw new Error(`Error Flip: ${errorMessage}`);
+    }
   }
 
   async confirm(id) {
-    if (typeof (id) === 'string') {
-      id = id.replace("FT", "");
+    try {
+      if (typeof (id) === 'string') {
+        id = id.replace("FT", "");
+      }
+      return this._http.put(`v2/digital-product-transfers/${id}/confirm`)
+    } catch (error) {
+      const errorMessage = _.get(error, 'errors[0].message');
+      throw new Error(`Error Flip: ${errorMessage}`);
     }
-    return this._http.put(`v2/digital-product-transfers/${id}/confirm`)
   }
 
   async cancel(id) {
-    if (typeof (id) === 'string') {
-      id = id.replace("FT", "");
+    try {
+      if (typeof (id) === 'string') {
+        id = id.replace("FT", "");
+      }
+      return this._http.put(`v2/digital-product-transfers/${id}/cancel`)
+    } catch (error) {
+      const errorMessage = _.get(error, 'errors[0].message');
+      throw new Error(`Error Flip: ${errorMessage}`);
     }
-    return this._http.put(`v2/digital-product-transfers/${id}/cancel`)
   }
 }
 
