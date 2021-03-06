@@ -9,7 +9,8 @@ const {
   UserService,
   WithdrawalService
 } = require('./services');
-const { banks } = require('./constants/bank')
+const { banks } = require('./constants/bank');
+const _ = require('lodash');
 
 class FlipSDK {
   _accessToken;
@@ -33,7 +34,8 @@ class FlipSDK {
       this.updateAccessToken(data.token);
       return data;
     } catch (error) {
-      throw new Error(error.message)
+      const errorMessage = _.get(error, 'errors[0].message');
+      throw new Error(`Error Flip: ${errorMessage}`);
     }
   }
 
@@ -44,7 +46,8 @@ class FlipSDK {
       this.updateAccessToken(data.token);
       return data;
     } catch (error) {
-      throw new Error(error.message)
+      const errorMessage = _.get(error, 'errors[0].message');
+      throw new Error(`Error Flip: ${errorMessage}`);
     }
   }
 
