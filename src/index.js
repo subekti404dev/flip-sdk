@@ -7,7 +7,8 @@ const {
   InquiryService,
   TransactionService,
   UserService,
-  WithdrawalService
+  WithdrawalService,
+  TopupService
 } = require('./services');
 const { banks } = require('./constants/bank');
 const _ = require('lodash');
@@ -81,6 +82,10 @@ class FlipSDK {
 
   get WithdrawalService() {
     return new WithdrawalService(this._accessToken);
+  }
+
+  get TopupService() {
+    return new TopupService(this._accessToken);
   }
 }
 

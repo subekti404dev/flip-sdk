@@ -7,6 +7,7 @@ const { LoginService } = require('./login.service')
 const { TransactionService } = require('./transaction.service')
 const { UserService } = require('./user.service')
 const { WithdrawalService } = require('./withdrawal.service')
+const { TopupService } = require('./topup.service')
 
 module.exports = {
   AccountService,
@@ -17,5 +18,6 @@ module.exports = {
   LoginService,
   TransactionService,
   UserService,
-  WithdrawalService
+  WithdrawalService,
+  TopupService
 }
