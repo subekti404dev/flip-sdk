@@ -80,11 +80,11 @@ class FlipSDK {
     return new UserService(this._accessToken);
   }
 
-  get WithdrawalService() {
+  get withdrawalService() {
     return new WithdrawalService(this._accessToken);
   }
 
-  get TopupService() {
+  get topupService() {
     return new TopupService(this._accessToken);
   }
 }
